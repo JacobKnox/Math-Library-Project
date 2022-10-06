@@ -70,9 +70,6 @@ public class Binary {
         }
         // Otherwise, set the sequence with spaces removed
         else{
-
-            /* SEE IF THERE IS A FASTER WAY THAN .replaceAll() */
-
             this.setBitSequence(bitSequence.replaceAll(" ", ""));
         }
         // Set the signed variable
@@ -182,21 +179,11 @@ public class Binary {
         for(int i = 0; i < this.numBits(); i++){
             // If the digit is a 0, replace it with a 1
             if(this.bits.charAt(i) == '0'){
-                try{
-                    this.setBitSequence(this.getBitSequence().substring(0, i) + "1" + this.getBitSequence().substring(i + 1, this.numBits()));
-                }
-                catch(Exception e){
-                    System.out.println("This should be unreachable, but somehow during negation the following Exception was returned: " + e.getMessage());
-                }
+                this.bits = this.getBitSequence().substring(0, i) + "1" + this.getBitSequence().substring(i + 1, this.numBits());
             }
             // If the digit is a 1, replace it with a 0
             else if(this.bits.charAt(i) == '1'){
-                try{
-                    this.setBitSequence(this.getBitSequence().substring(0, i) + "0" + this.getBitSequence().substring(i + 1, this.numBits()));
-                }
-                catch(Exception e){
-                    System.out.println("This should be unreachable, but somehow during negation the following Exception was returned: " + e.getMessage());
-                }
+                this.bits = this.getBitSequence().substring(0, i) + "0" + this.getBitSequence().substring(i + 1, this.numBits());
             }
         }
     }
@@ -257,6 +244,34 @@ public class Binary {
     public double numBytesPrecise(){
         // Divides the number of bits by 8
         return (double) (this.numBits()) / 8.0;
+    }
+
+    /**
+     * Shifts the bit sequence left.
+     * @param numShifts An integer representing the number of shifts to perform.
+     */
+    public void shiftLeft(int numShifts){
+        // Redefines the bit sequence as a substring excluding the first numShifts digits
+        this.bits = this.getBitSequence().substring(numShifts);
+        // For the number of shifts
+        for(int i = 0; i < numShifts; i++){
+            // Add a 0 at the end
+            this.bits = this.getBitSequence() + "0";
+        }
+    }
+
+    /**
+     * Shifts the bit sequence right.
+     * @param numShifts An integer representing the number of shifts to perform.
+     */
+    public void shiftRight(int numShifts){
+        // Redefines the bit sequence as a substring excluding the last numShifts digits
+        this.bits = this.getBitSequence().substring(0, this.bits.length() - numShifts + 1);
+        // For the number of shifts
+        for(int i = 0; i < numShifts; i++){
+            // Add a 0 at the start
+            this.bits = "0" + this.getBitSequence();
+        }
     }
 
 
