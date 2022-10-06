@@ -25,7 +25,7 @@ public class Binary {
     /**
      * A String containing all valid digits of a binary number.
      */
-    private String validDigits = "01. ";
+    private String validDigits = "01 ";
 
 
 
@@ -274,6 +274,41 @@ public class Binary {
         }
     }
 
+    public void add(Binary num){
+        long temp = this.convertToDecimal() + num.convertToDecimal();
+
+    }
+
+
+
+    /* CONVERSION METHODS */
+
+
+
+    /**
+     * Converts the Binary instance to decimal.
+     * @return A long representing the Binary instance as a decimal number.
+     */
+    public long convertToDecimal(){
+        // If it is unsigned, then return a call to the private method unsignedToDecimal()
+        if(!this.isSigned()){
+            return this.unsignedToDecimal();
+        }
+        // Create a temporary Binary instance that is the negation of this instance
+        Binary temp = this.negatePreserve();
+        // Make the temporary Binary instance unsigned
+        temp.signed = false;
+        // Add 1
+        try{
+            temp.add(new Binary("1"));
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+        // Return a call to the private method unsignedToDecimal()
+        return -1 * temp.unsignedToDecimal();
+    }
+
 
 
     /* PRIVATE UTILITY METHODS */
@@ -294,5 +329,23 @@ public class Binary {
         }
         // Return true if we never return false
         return true;
+    }
+
+    /**
+     * Converts the Binary instance to decimal, assuming it is unsigned.
+     * @return A long representing the unsigned Binary instance as a decimal.
+     */
+    private long unsignedToDecimal(){
+        // Initialize an answer variable
+        long answer = 0;
+        // Create a temporary String with the bit sequence removing all spaces
+        String temp = this.getBitSequence().replaceAll(" ", "");
+        // For digit in the bit sequence
+        for(int i = temp.length() - 1; i > -1; i--){
+            // Add to the answer the digit times 2 to the ith power
+            answer += Integer.parseInt(temp.substring(i, i + 1)) * Math.pow(2, i);
+        }
+        // Return the answer
+        return answer;
     }
 }
